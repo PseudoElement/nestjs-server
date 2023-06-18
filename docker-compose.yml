@@ -7,6 +7,7 @@ services:
     environment:
       POSTGRES_USER: nest_test
       POSTGRES_PASSWORD: nest_test
+      POSTGRES_HOST_AUTH_METHOD: "trust"
       PGDATA: /data/postgres
     ports:
       - 127.0.0.1:5432:5432
