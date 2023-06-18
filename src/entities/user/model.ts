@@ -12,4 +12,9 @@ export interface IUser{
     gender: Genders
 }
 
+export interface ILoginUser{
+    email: string
+    password: string
+}
+
 export type IUserWithoutPass = Omit<IUser, "password">

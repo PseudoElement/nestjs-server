@@ -4,6 +4,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Response, Request } from 'express';
 import { IUser } from './model';
 import { UpdateUserDto } from './dto/updateUser.dto';
+import { LoginUserDto } from './dto/loginUser.dto';
 
 @Controller('users')
 export class UserController {
@@ -29,7 +30,7 @@ export class UserController {
         return res.status(200).send({user: user})
     }
 
-    @Post('/')
+    @Post('/register')
     @UseInterceptors(FileInterceptor(""))
     async createUser(
         @Req() req: Request,
@@ -40,6 +41,16 @@ export class UserController {
         await this.userService.createUser(req.body)
 
         return res.status(200).json({message: "User successfully created."})
+    }
+
+    @Post("/login")
+    async loginUser(
+        @Req() req: Request,
+        @Res() res: Response,
+        @Body() body: LoginUserDto
+    ){
+        const message = await this.userService.onLoginUser(body);
+        return res.status(200).send({message})
     }
 
     @Put('/:id')
