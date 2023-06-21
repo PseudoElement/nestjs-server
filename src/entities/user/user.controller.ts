@@ -2,9 +2,9 @@ import { UserService } from './user.service';
 import { Controller, Get, Post, Put, Delete, Patch, Req, Res, UseInterceptors, Param, ParseIntPipe, Body } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response, Request } from 'express';
-import { IUser } from './model';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { LoginUserDto } from './dto/loginUser.dto';
+import { CreateUserDto } from './dto/createUser.dto';
 
 @Controller('users')
 export class UserController {
@@ -34,13 +34,11 @@ export class UserController {
     @UseInterceptors(FileInterceptor(""))
     async createUser(
         @Req() req: Request,
-        @Res() res: Response
+        @Res() res: Response,
+        @Body() body: CreateUserDto
     ){
-        const isValid = !!req.body.nameLast
-        if(!isValid) return res.status(400).json({message: "Input last name."})
-        await this.userService.createUser(req.body)
-
-        return res.status(200).json({message: "User successfully created."})
+        const serviceRes = await this.userService.createUser(body)
+        return res.status(serviceRes.status).json({...serviceRes.user, access_token: serviceRes.access_token})
     }
 
     @Post("/login")
@@ -49,8 +47,9 @@ export class UserController {
         @Res() res: Response,
         @Body() body: LoginUserDto
     ){
-        const message = await this.userService.onLoginUser(body);
-        return res.status(200).send({message})
+        const serviceRes = await this.userService.loginUser(body);
+        if(serviceRes.status > 200) return res.status(serviceRes.status).send({message: serviceRes.message})
+        else return res.status(serviceRes.status).send({...serviceRes.user, access_token: serviceRes.access_token})
     }
 
     @Put('/:id')

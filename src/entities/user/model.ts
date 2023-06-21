@@ -10,11 +10,20 @@ export interface IUser{
     email: string
     birthDate: Date
     gender: Genders
+    id:number
 }
 
-export interface ILoginUser{
-    email: string
-    password: string
+export interface ICreateUserResponse{
+    status: number,
+    access_token: string
+    user: IUserWithoutPass
 }
+
+export interface ILoginUserResponse {
+    status: number
+    message?: string
+    access_token?: string
+    user?: IUserWithoutPass
+} 
 
 export type IUserWithoutPass = Omit<IUser, "password">

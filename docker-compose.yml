@@ -1,4 +1,4 @@
-version: '3.5'
+version: '3.8'
 
 services:
   nest_test_postgres:
@@ -36,4 +36,5 @@ networks:
     driver: bridge
 volumes:
   postgres:
-  pgadmin:    
+  pgadmin:
+  server:    
