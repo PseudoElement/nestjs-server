@@ -1,29 +1,42 @@
+import { Response } from 'express';
+import { status } from 'src/constants';
+import { ResponseStatus } from 'src/model';
+
 export enum Genders {
     MALE = 'Male',
     FEMALE = 'Female',
 }
 
-export interface IUser{
-    nameLast: string
-    nameFirst: string
-    password: string
-    email: string
-    birthDate: Date
-    gender: Genders
-    id:number
+export interface IUser {
+    nameLast: string;
+    nameFirst: string;
+    password: string;
+    email: string;
+    birthDate: Date;
+    gender: Genders;
+    id: number;
 }
 
-export interface ICreateUserResponse{
-    status: number,
-    access_token: string
-    user: IUserWithoutPass
+export interface ICreateUserResponse {
+    status: number;
+    access_token?: string;
+    user?: IUserWithoutPass;
+    message?: string;
 }
 
-export interface ILoginUserResponse {
-    status: number
-    message?: string
-    access_token?: string
-    user?: IUserWithoutPass
-} 
+export type ILoginUserResponse = ICreateUserResponse;
 
-export type IUserWithoutPass = Omit<IUser, "password">
+export type IGetUserResponse = Omit<ILoginUserResponse, 'access_token'>;
+
+export type IUserWithoutPass = Omit<IUser, 'password'>;
+
+export type IDeleteUserResponse = Required<Pick<ILoginUserResponse, 'message' | 'status'>>;
+
+export type IUpdateUserResponse = IDeleteUserResponse;
+
+export interface ISendResponseController {
+    res: Response;
+    resStatus: ResponseStatus;
+    message?: string;
+    data?: any;
+}

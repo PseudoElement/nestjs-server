@@ -1,9 +1,13 @@
-import { IsEmail, IsEnum, IsISO8601, IsNotEmpty, IsString, MinLength } from "class-validator";
+import { IsDate, IsEmail, IsEnum, IsISO8601, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
 import { Genders } from "../model";
 
 export class UpdateUserDto{
     @IsEmail()
     email: string
+
+    @IsString()
+    @MinLength(5)
+    password: string
 
     @IsString()
     @MinLength(3)
@@ -13,10 +17,12 @@ export class UpdateUserDto{
     @MinLength(3)
     nameLast: string
     
-    @IsISO8601()
-    birthDate: Date
+    @IsString()
+    @IsOptional()
+    birthDate?: Date
     
     @IsNotEmpty()
     @IsEnum(Genders)
-    gender: Genders
+    @IsOptional()
+    gender?: Genders
 }

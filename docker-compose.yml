@@ -1,40 +1,100 @@
-version: '3.8'
+# version: '3.8'
+
+# services:
+#   nestjs-postgres:
+#     container_name: nestjs-postgres-container
+#     image: postgres:14
+#     environment:
+#       POSTGRES_USER: nest_test
+#       POSTGRES_PASSWORD: nest_test
+#       PGDATA: /data/postgres
+#     ports:
+#       - '5432:5432'
+#     volumes:
+#       - ./pgdata:/var/lib/postgresql/data
+#     restart: unless-stopped  
+#     networks:
+#       - global
+
+#   api:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     container_name: nestjs-api-container
+#     ports:
+#       - '3000:3000'
+#     depends_on:
+#       - nestjs-postgres
+#       - nestjs-pgadmin
+#     volumes:
+#       - ./src:/app/src
+#     restart: unless-stopped 
+#     networks:
+#       - global  
+
+#   nestjs-pgadmin: 
+#     container_name: nestjs-pgadmin-container
+#     image: dpage/pgadmin4
+#     environment:
+#       PGADMIN_DEFAULT_EMAIL: nest_test@admin.com
+#       PGADMIN_DEFAULT_PASSWORD: nest_test
+#       PGADMIN_CONFIG_SERVER_MODE: 'False'
+#     volumes: 
+#       - pgadmin:/var/www/nestjs/docker-volumes/pgadmin
+#     ports: 
+#       - '5050:80'
+#     depends_on:
+#       - nestjs-postgres  
+#     restart: unless-stopped
+#     networks:
+#       - global
+
+# networks:
+#   global:
+#     driver: bridge
+# volumes:
+#   postgres:
+#   pgadmin:
+#   api:    
+
+version: '3.5'
 
 services:
-  nest_test_postgres:
-    container_name: nest_test_postgres
-    image: postgres:14
+  db:
+    image: postgres
+    restart: always
     environment:
       POSTGRES_USER: nest_test
       POSTGRES_PASSWORD: nest_test
-      PGDATA: /data/postgres
+      POSTGRES_HOST: nest_test
+    container_name: nestjs-postgres
     ports:
-      - 127.0.0.1:5432:5432
-    networks:
-      - nest_test
+      - '5432:5432'
     volumes:
-      - postgres:/var/www/nest_test/docker-volumes/postgres
-    restart: unless-stopped  
+      - pgdata:/var/lib/postgresql/data  
 
-  nest_test_pgadmin: 
-    container_name: nest_test_pgadmin
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: nest_test@admin.com
-      PGADMIN_DEFAULT_PASSWORD: nest_test
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    volumes: 
-      - pgadmin:/var/www/nest_test/docker-volumes/pgadmin
-    ports: 
-      - 127.0.0.1:5050:80
-    networks: 
-      - nest_test
-    restart: unless-stopped
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: nestjs-app
+  #   environment:
+  #     PORT: 3000
+  #   ports:
+  #     - '3000:3000'
+  #   depends_on:
+  #     - db
 
-networks: 
-  nest_test:
-    driver: bridge
-volumes:
-  postgres:
   pgadmin:
-  server:    
+    image: dpage/pgadmin4
+    restart: always
+    container_name: nestjs-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: pgadmin
+    ports:
+      - '5050:80'
+    depends_on:
+      - db
+volumes:
+  pgdata:      
