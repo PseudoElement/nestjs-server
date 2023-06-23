@@ -4,6 +4,7 @@ import { UsersModule } from '@entities/user/users.module';
 import { ConfigModule } from './config.module';
 import { Users } from '@entities/user/users.model';
 import { AuthModule } from './entities/auth/auth.module';
+import { ChatModule } from './entities/chat/chat.module';
 
 @Module({
     imports: [
@@ -21,6 +22,7 @@ import { AuthModule } from './entities/auth/auth.module';
         UsersModule,
         ConfigModule,
         AuthModule,
+        ChatModule,
     ],
     controllers: [],
     providers: [],
