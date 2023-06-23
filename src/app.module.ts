@@ -7,16 +7,18 @@ import { AuthModule } from './entities/auth/auth.module';
 
 @Module({
     imports: [
-        UsersModule,
         SequelizeModule.forRoot({
             dialect: 'postgres',
-            host: 'postgres',
+            host: 'nestjs-postgres', //name of postgres-container (without docker - localhost)
             port: 5432,
-            username: 'nest_test',
-            password: 'nest_test',
-            database: 'nest_test',
+            username: 'postgres',
+            password: 'root',
+            database: 'nestjs-db',
             models: [Users],
+            autoLoadModels: true,
+            synchronize: true,
         }),
+        UsersModule,
         ConfigModule,
         AuthModule,
     ],

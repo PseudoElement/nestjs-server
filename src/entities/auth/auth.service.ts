@@ -22,7 +22,7 @@ export class AuthService {
         if (isExistUser) return { status: status.requestError, message: 'User already exists.' };
         const salt = await genSalt(10);
         const hashedPassword = await hash(userData.password, salt);
-        const response = await this.usersRepository.create({ ...userData, password: hashedPassword });
+        const response = await this.usersRepository.create({ ...userData, password: hashedPassword }, { isNewRecord: true });
         const user = response.dataValues;
         const token = await this._createToken(user);
         return { user: omitProp('password', user), status: 200, access_token: token };

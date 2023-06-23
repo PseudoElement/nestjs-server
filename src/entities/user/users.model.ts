@@ -1,7 +1,7 @@
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
 import { Genders } from 'src/model';
 
-@Table({ tableName: 'Users' })
+@Table({ tableName: 'Users', timestamps: false })
 export class Users extends Model<Users> {
     @Column({ allowNull: false, type: DataType.INTEGER, autoIncrement: true, primaryKey: true })
     id: number;
@@ -17,6 +17,9 @@ export class Users extends Model<Users> {
         },
     })
     email: string;
+
+    @Column({ type: DataType.DATE, allowNull: true }) createdAt?: Date | null;
+    @Column({ type: DataType.DATE, allowNull: true }) updatedAt?: Date | null;
 
     @Column({ type: DataType.STRING })
     password: string;
