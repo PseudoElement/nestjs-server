@@ -1,5 +1,5 @@
 import { IsDate, IsEmail, IsEnum, IsISO8601, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
-import { Genders } from "../model";
+import { Genders } from "src/model";
 
 export class UpdateUserDto{
     @IsEmail()

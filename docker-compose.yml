@@ -60,30 +60,32 @@
 version: '3.5'
 
 services:
-  db:
+  postgres:
     image: postgres
+    container_name: nestjs-postgres
     restart: always
     environment:
       POSTGRES_USER: nest_test
       POSTGRES_PASSWORD: nest_test
       POSTGRES_HOST: nest_test
-    container_name: nestjs-postgres
+      PGDATA: /var/lib/postresql/data
     ports:
       - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data  
 
-  # app:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   container_name: nestjs-app
-  #   environment:
-  #     PORT: 3000
-  #   ports:
-  #     - '3000:3000'
-  #   depends_on:
-  #     - db
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nestjs-app
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+    volumes: 
+      - .:/app
+      - /app/node_modules  
 
   pgadmin:
     image: dpage/pgadmin4
@@ -95,6 +97,6 @@ services:
     ports:
       - '5050:80'
     depends_on:
-      - db
+      - postgres
 volumes:
   pgdata:      

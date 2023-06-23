@@ -9,9 +9,11 @@ RUN npm install
 COPY . .
   
 RUN npm run build
+
+COPY ./dist ./dist
  
 USER node
 
 EXPOSE 3000
  
-CMD [ "npm", "run", "start:dev" ]
+CMD [ "npm", "run", "build" ]
