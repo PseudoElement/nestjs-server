@@ -4,4 +4,6 @@ export interface IStatus {
     success: 200;
     redirect: 302;
     notFound: 404;
+    unauthorized: 401;
+    conflict: 409;
 }

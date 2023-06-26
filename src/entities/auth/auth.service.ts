@@ -12,31 +12,31 @@ export class AuthService {
     constructor(@Inject(USERS_REPOSITORY) private readonly usersRepository: typeof Users, private jwtService: JwtService) {}
 
     private async _createToken(user: IUser): Promise<string> {
-        const tokenPayload = { id: user.id, username: user.nameFirst };
+        const tokenPayload = { id: user.id, username: user.email };
         const token = await this.jwtService.signAsync(tokenPayload);
         return token;
     }
 
     public async createUser(userData: CreateUserDto): Promise<ICreateUserResponse> {
         const isExistUser = await this.usersRepository.findOne({ where: { email: userData.email } });
-        if (isExistUser) return { status: status.requestError, message: 'User already exists.' };
+        if (isExistUser) return { status: status.conflict, message: 'User already exists.' };
         const salt = await genSalt(10);
         const hashedPassword = await hash(userData.password, salt);
         const response = await this.usersRepository.create({ ...userData, password: hashedPassword }, { isNewRecord: true });
         const user = response.dataValues;
         const token = await this._createToken(user);
-        return { user: omitProp('password', user), status: 200, access_token: token };
+        return { user: omitProp('password', user), status: status.success, access_token: token };
     }
 
     public async loginUser(loginData: LoginUserDto): Promise<ILoginUserResponse> {
         const response = await this.usersRepository.findOne({ where: { email: loginData.email } });
         if (!response) {
-            return { message: 'Email is not registered.', status: status.requestError };
+            return { message: 'Email is not registered.', status: status.notFound };
         }
         const user = response.dataValues;
         const match = await compare(loginData.password, user.password);
         if (!match) {
-            return { message: 'Incorrect password!', status: status.requestError };
+            return { message: 'Incorrect password!', status: status.unauthorized };
         } else {
             const token = await this._createToken(user);
             return { status: status.success, access_token: token, user: omitProp('password', user) };

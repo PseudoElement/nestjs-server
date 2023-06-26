@@ -5,6 +5,7 @@ import { ConfigModule } from './config.module';
 import { Users } from '@entities/user/users.model';
 import { AuthModule } from './entities/auth/auth.module';
 import { ChatModule } from './entities/chat/chat.module';
+import { AboutPageModule } from './entities/about-page/about-page.module';
 
 @Module({
     imports: [
@@ -23,6 +24,7 @@ import { ChatModule } from './entities/chat/chat.module';
         ConfigModule,
         AuthModule,
         ChatModule,
+        AboutPageModule,
     ],
     controllers: [],
     providers: [],

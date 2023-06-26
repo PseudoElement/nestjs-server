@@ -9,20 +9,20 @@ export class UpdateUserDto{
     @MinLength(5)
     password: string
 
-    @IsString()
-    @MinLength(3)
-    nameFirst: string
+    // @IsString()
+    // @MinLength(3)
+    // nameFirst: string
 
-    @IsString()
-    @MinLength(3)
-    nameLast: string
+    // @IsString()
+    // @MinLength(3)
+    // nameLast: string
     
-    @IsString()
-    @IsOptional()
-    birthDate?: Date
+    // @IsString()
+    // @IsOptional()
+    // birthDate?: Date
     
-    @IsNotEmpty()
-    @IsEnum(Genders)
-    @IsOptional()
-    gender?: Genders
+    // @IsNotEmpty()
+    // @IsEnum(Genders)
+    // @IsOptional()
+    // gender?: Genders
 }

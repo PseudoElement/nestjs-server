@@ -8,12 +8,8 @@ export enum Genders {
 }
 
 export interface IUser {
-    nameLast: string;
-    nameFirst: string;
     password: string;
     email: string;
-    birthDate: Date;
-    gender: Genders;
     id: number;
 }
 
