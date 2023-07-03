@@ -1,7 +1,3 @@
-import { Response } from 'express';
-import { status } from 'src/constants';
-import { ResponseStatus } from 'src/model';
-
 export enum Genders {
     MALE = 'Male',
     FEMALE = 'Female',

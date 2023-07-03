@@ -9,7 +9,6 @@ import { AboutPageModule } from './entities/about-page/about-page.module';
 import { Messages } from '@entities/chat/chat.model';
 import { DeveloperCards } from '@entities/about-page/about-page.model';
 import { ProductsPageModule } from './entities/products-page/products-page.module';
-import { ProductsPageController } from './entities/products-page/products-page.controller';
 import { Applications } from '@entities/products-page/apps.model';
 
 @Module({
@@ -32,7 +31,6 @@ import { Applications } from '@entities/products-page/apps.model';
         AboutPageModule,
         ProductsPageModule,
     ],
-    controllers: [],
     providers: [],
 })
 export class AppModule {}

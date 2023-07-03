@@ -1,37 +1,43 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { WEB_APPS_REPOSITORY } from 'src/constants';
 import { Applications } from './apps.model';
-import { IAppToDB, IApplicationFromDB } from 'src/model';
+import { IApplication, IGetWebApplicationsQueryParams } from 'src/model';
 import * as fs from 'fs';
+import { convertBufferToImg } from 'src/helpers';
 
 @Injectable()
-export class ProductsPageService implements OnModuleInit {
+export class ProductsPageService {
     constructor(@Inject(WEB_APPS_REPOSITORY) private appsRepository: typeof Applications) {}
 
-    async onModuleInit() {
-        await this.addApp({
-            authorPhoto: '../../../../../Angular/BooBook.Root.Web/root-web/src/assets/img/png/LarosPreview.png',
-            title: 'Laros',
-            url: 'https://laros.ch/',
-            description: 'Swiss travel agency web-app for booking tickets to Greece and Cyprus',
-            authorLink: '/developer/sintol',
+    attributes = { exclude: ['updatedAt', 'createdAt', 'id'] };
+
+    public async getAllWebApplications(): Promise<IApplication[]> {
+        const res = await this.appsRepository.findAll({ attributes: this.attributes });
+        const apps = res.map((val) => {
+            const photo = convertBufferToImg(val.dataValues.authorPhoto);
+            return { ...val.dataValues, authorPhoto: photo };
         });
+        return apps;
     }
 
-    public async getAllWebApplications(): Promise<IApplicationFromDB[]> {
-        const res = await this.appsRepository.findAll({ attributes: { exclude: ['updatedAt'] } });
-        return res;
+    public async getLimitedApplications({ _page, _limit }: IGetWebApplicationsQueryParams): Promise<IApplication[]> {
+        _page = _page - 1;
+        const res = await this.appsRepository.findAndCountAll({ attributes: this.attributes, offset: _page * _limit, limit: _limit });
+        const apps = res.rows.map((val) => {
+            const photo = convertBufferToImg(val.dataValues.authorPhoto);
+            return { ...val.dataValues, authorPhoto: photo };
+        });
+        return apps;
     }
-    public async addApp(data: IAppToDB): Promise<any> {
-        const photoBuffer = fs.readFileSync(data.authorPhoto);
-        console.log('PHOTO_BUFFER', photoBuffer);
+
+    private async _addApp(data: IApplication): Promise<void> {
+        const imageBuffer = fs.readFileSync(data.authorPhoto);
         const res = await this.appsRepository.create({
             authorLink: data.authorLink,
-            authorPhoto: photoBuffer,
-            title: data.title,
             description: data.description,
+            title: data.title,
             url: data.url,
+            authorPhoto: imageBuffer,
         });
-        console.log('RESPONSE', res);
     }
 }

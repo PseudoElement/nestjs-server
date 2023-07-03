@@ -1,15 +1,21 @@
-import { Controller, Get, Param, Query, Req, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Controller, Get, Query, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { status } from 'src/constants';
+import { IGetWebApplicationsQueryParams } from 'src/model';
+import { ProductsPageService } from './products-page.service';
 
 @Controller('products')
 export class ProductsPageController {
+    constructor(private productsService: ProductsPageService) {}
     @Get('/apps')
-    getWebApplications(@Req() req: Request, @Res() res: Response, @Query() query: any) {
-        const { params, query: queryParams } = req;
-        console.log('PARAMS', params);
-        console.log('QUERY_PARAMS', queryParams);
-        console.log('QUERY', query);
-        return res.status(status.success).send('Hello');
+    async getWebApplications(@Res() res: Response, @Query() query: IGetWebApplicationsQueryParams) {
+        if (!query._limit || !query._page) {
+            const apps = await this.productsService.getAllWebApplications();
+            return res.status(status.success).send(apps);
+        } else {
+            const { _limit, _page } = query;
+            const apps = await this.productsService.getLimitedApplications({ _limit, _page });
+            return res.status(status.success).send(apps);
+        }
     }
 }

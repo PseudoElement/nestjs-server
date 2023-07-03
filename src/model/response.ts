@@ -7,3 +7,5 @@ export interface IStatus {
     unauthorized: 401;
     conflict: 409;
 }
+
+export type MimeTypes = 'image/jpg' | 'image/png';

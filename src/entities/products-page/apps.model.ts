@@ -2,8 +2,8 @@ import { Table, Column, Model, DataType } from 'sequelize-typescript';
 
 @Table({ tableName: 'applications' })
 export class Applications extends Model<Applications> {
-    @Column({ type: DataType.STRING, primaryKey: true, autoIncrement: true })
-    id: string;
+    @Column({ allowNull: false, type: DataType.INTEGER, primaryKey: true, autoIncrement: true })
+    id: number;
     @Column({ type: DataType.STRING })
     authorLink: string;
     @Column({ type: DataType.BLOB })
