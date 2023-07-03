@@ -2,23 +2,26 @@ import { OnModuleInit } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
 import { Socket } from 'dgram';
 import { Server } from 'socket.io';
+import { MessagesDto } from './dto/MessageDto';
+import { ChatService } from './chat.service';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateway implements OnModuleInit {
-    constructor() {}
+    constructor(private chatService: ChatService) {}
 
     @WebSocketServer()
     server: Server;
 
     @SubscribeMessage('messageFromClient')
-    handleMessage(@MessageBody() body: string, @ConnectedSocket() client: Socket): void {
+    async handleMessage(@MessageBody() body: MessagesDto, @ConnectedSocket() client: Socket): Promise<void> {
         console.log(body);
+        await this.chatService.saveMessage(body);
         this.server.emit('messageFromServer', {
             body,
         });
     }
 
-    onModuleInit() {
+    async onModuleInit() {
         console.log('GATEWAY IS OPEN');
         this.server.on('connection', (socket) => {
             console.log(socket.id);

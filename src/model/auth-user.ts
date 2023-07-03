@@ -29,10 +29,3 @@ export type IUserWithoutPass = Omit<IUser, 'password'>;
 export type IDeleteUserResponse = Required<Pick<ILoginUserResponse, 'message' | 'status'>>;
 
 export type IUpdateUserResponse = IDeleteUserResponse;
-
-export interface ISendResponseController {
-    res: Response;
-    resStatus: ResponseStatus;
-    message?: string;
-    data?: any;
-}

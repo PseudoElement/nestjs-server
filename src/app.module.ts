@@ -6,6 +6,11 @@ import { Users } from '@entities/user/users.model';
 import { AuthModule } from './entities/auth/auth.module';
 import { ChatModule } from './entities/chat/chat.module';
 import { AboutPageModule } from './entities/about-page/about-page.module';
+import { Messages } from '@entities/chat/chat.model';
+import { DeveloperCards } from '@entities/about-page/about-page.model';
+import { ProductsPageModule } from './entities/products-page/products-page.module';
+import { ProductsPageController } from './entities/products-page/products-page.controller';
+import { Applications } from '@entities/products-page/apps.model';
 
 @Module({
     imports: [
@@ -16,7 +21,7 @@ import { AboutPageModule } from './entities/about-page/about-page.module';
             username: 'postgres',
             password: 'root',
             database: 'nestjs-db',
-            models: [Users],
+            models: [Users, Messages, DeveloperCards, Applications],
             autoLoadModels: true,
             synchronize: true,
         }),
@@ -25,6 +30,7 @@ import { AboutPageModule } from './entities/about-page/about-page.module';
         AuthModule,
         ChatModule,
         AboutPageModule,
+        ProductsPageModule,
     ],
     controllers: [],
     providers: [],

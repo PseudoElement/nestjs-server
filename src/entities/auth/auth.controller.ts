@@ -12,6 +12,7 @@ export class AuthController {
     @Post('/register')
     @UseInterceptors(FileInterceptor(''))
     async createUser(@Req() req: Request, @Res() res: Response, @Body() body: CreateUserDto) {
+        console.log('BODY', body);
         const response = await this.authService.createUser(body);
         const { status: resStatus, message, user, access_token } = response;
         if (resStatus === status.conflict) return res.status(status.conflict).send({ message });

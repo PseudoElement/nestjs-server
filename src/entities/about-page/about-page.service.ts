@@ -4,12 +4,13 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { DeveloperCardDto } from './dto';
 import { DeveloperCards } from './about-page.model';
+import { DEVELOPER_CARDS_REPOSITORY } from 'src/constants';
 
 @Injectable()
 export class AboutPageService implements OnModuleInit {
     private pool: Pool;
 
-    constructor(@Inject('DEVELOPER_CARDS_REPOSITORY') private readonly developerCardsRepo: typeof DeveloperCards) {
+    constructor(@Inject(DEVELOPER_CARDS_REPOSITORY) private readonly developerCardsRepo: typeof DeveloperCards) {
         this.pool = new Pool({
             user: 'postgres',
             host: 'nestjs-postgres',
