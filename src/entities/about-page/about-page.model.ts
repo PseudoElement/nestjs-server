@@ -11,7 +11,7 @@ export class DeveloperCards extends Model<DeveloperCards> {
     @Column({ type: DataType.STRING })
     info: string;
     @Column({ type: DataType.STRING })
-    path_to_page: string;
+    pathToPage: string;
     @Column({ type: DataType.BLOB('long') })
     photo: Buffer;
 }

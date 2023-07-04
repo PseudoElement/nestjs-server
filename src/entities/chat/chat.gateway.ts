@@ -1,5 +1,5 @@
 import { OnModuleInit } from '@nestjs/common';
-import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
+import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Socket } from 'dgram';
 import { Server } from 'socket.io';
 import { MessagesDto } from './dto/MessageDto';
@@ -15,10 +15,13 @@ export class ChatGateway implements OnModuleInit {
     @SubscribeMessage('messageFromClient')
     async handleMessage(@MessageBody() body: MessagesDto, @ConnectedSocket() client: Socket): Promise<void> {
         console.log(body);
-        await this.chatService.saveMessage(body);
-        this.server.emit('messageFromServer', {
-            body,
-        });
+        const message = await this.chatService.saveMessage(body);
+        const messagesNumber = await this.chatService.checkMessageNumberInDB();
+        if (messagesNumber > 100) {
+            await this.chatService.deleteOldestMessageFromDB();
+            this.server.emit('deleteOldestMessage');
+        }
+        this.server.emit('messageFromServer', message);
     }
 
     async onModuleInit() {
