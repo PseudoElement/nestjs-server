@@ -10,6 +10,8 @@ import { Messages } from '@entities/chat/chat.model';
 import { DeveloperCards } from '@entities/about-page/about-page.model';
 import { ProductsPageModule } from './entities/products-page/products-page.module';
 import { Applications } from '@entities/products-page/apps.model';
+import { Games } from '@entities/products-page/games.model';
+import { TokenService } from './services/token.service';
 
 @Module({
     imports: [
@@ -20,7 +22,7 @@ import { Applications } from '@entities/products-page/apps.model';
             username: 'postgres',
             password: 'root',
             database: 'nestjs-db',
-            models: [Users, Messages, DeveloperCards, Applications],
+            models: [Users, Messages, DeveloperCards, Applications, Games],
             autoLoadModels: true,
             synchronize: true,
         }),
@@ -31,6 +33,6 @@ import { Applications } from '@entities/products-page/apps.model';
         AboutPageModule,
         ProductsPageModule,
     ],
-    providers: [],
+    providers: [TokenService],
 })
 export class AppModule {}

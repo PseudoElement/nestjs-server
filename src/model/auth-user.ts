@@ -12,13 +12,14 @@ export interface IUser {
 export interface ICreateUserResponse {
     status: number;
     access_token?: string;
+    refresh_token?: string;
     user?: IUserWithoutPass;
     message?: string;
 }
 
 export type ILoginUserResponse = ICreateUserResponse;
 
-export type IGetUserResponse = Omit<ILoginUserResponse, 'access_token'>;
+export type IGetUserResponse = Omit<ILoginUserResponse, 'access_token' | 'refresh_token'>;
 
 export type IUserWithoutPass = Omit<IUser, 'password'>;
 

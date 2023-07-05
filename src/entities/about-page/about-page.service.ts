@@ -28,7 +28,6 @@ export class AboutPageService {
             const photo = convertBufferToImg(data.photo);
             return { photoSrcData: photo, info: data.info, pathToPage: data.pathToPage, post: data.post, name: data.name };
         });
-        console.log(developerCards);
         return developerCards;
     }
 }

@@ -16,7 +16,7 @@ export class ChatGateway implements OnModuleInit {
     async handleMessage(@MessageBody() body: MessagesDto, @ConnectedSocket() client: Socket): Promise<void> {
         console.log(body);
         const message = await this.chatService.saveMessage(body);
-        const messagesNumber = await this.chatService.checkMessageNumberInDB();
+        const messagesNumber = await this.chatService.checkMessagesNumberInDB();
         if (messagesNumber > 100) {
             await this.chatService.deleteOldestMessageFromDB();
             this.server.emit('deleteOldestMessage');

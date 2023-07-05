@@ -20,9 +20,13 @@ export class UsersController {
         @Param('id', ParseIntPipe) id: number,
         @Param() params: any, //all params(like :id, not queryParams) or req.params
     ) {
-        const response = await this.userService.getUserData(id);
-        if (response.status === status.requestError) return res.status(status.requestError).send({ message: response.message });
-        else return res.status(status.success).send({ user: response.user });
+        const access_token = req.headers['access-token'] as string;
+        const response = await this.userService.getUserData(id, access_token);
+        if (response.status === status.unauthorized || response.status === status.conflict) {
+            return res.status(response.status).send({ message: response.message });
+        } else {
+            return res.status(status.success).send({ user: response.user });
+        }
     }
 
     @Put('/:id')

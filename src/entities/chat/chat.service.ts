@@ -22,7 +22,7 @@ export class ChatService {
         return messages;
     }
 
-    public async checkMessageNumberInDB() {
+    public async checkMessagesNumberInDB() {
         const res = await this.messagesRepo.findAll();
         return res.length;
     }
@@ -31,7 +31,6 @@ export class ChatService {
         const oldestMessage = await this.messagesRepo.findOne({
             order: [['createdAt', 'ASC']],
         });
-        console.log(oldestMessage);
         if (oldestMessage) await oldestMessage.destroy();
     }
 }

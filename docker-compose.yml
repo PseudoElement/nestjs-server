@@ -6,7 +6,7 @@ services:
     container_name: nestjs-postgres
     restart: always
     env_file: 
-      - .development.env
+      - .env
     environment:
       PGDATA: /var/lib/postresql/data
     ports:

@@ -1,7 +1,7 @@
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
 
-@Table({ tableName: 'applications' })
-export class Applications extends Model<Applications> {
+@Table({ tableName: 'games' })
+export class Games extends Model<Games> {
     @Column({ allowNull: false, type: DataType.INTEGER, primaryKey: true, autoIncrement: true })
     id: number;
     @Column({ type: DataType.STRING })

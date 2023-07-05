@@ -18,4 +18,15 @@ export class ProductsPageController {
             return res.status(status.success).send(apps);
         }
     }
+    @Get('/games')
+    async getWebGames(@Res() res: Response, @Query() query: IGetWebApplicationsQueryParams) {
+        if (!query._limit || !query._page) {
+            const games = await this.productsService.getAllGames();
+            return res.status(status.success).send(games);
+        } else {
+            const { _limit, _page } = query;
+            const games = await this.productsService.getLimitedGames({ _limit, _page });
+            return res.status(status.success).send(games);
+        }
+    }
 }

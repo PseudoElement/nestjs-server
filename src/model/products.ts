@@ -1,12 +1,12 @@
 export interface IApplicationToDB {
-    pathToAuthorPhoto: string;
+    pathToAppPhoto: string;
     authorLink: string;
     title: string;
     description: string;
     url: string;
 }
 export interface IApplicationFromDB {
-    authorPhotoSrcData: string;
+    appPhotoSrcData: string;
     authorLink: string;
     title: string;
     description: string;
