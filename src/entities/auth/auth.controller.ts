@@ -15,7 +15,7 @@ export class AuthController {
     async createUser(@Req() req: Request, @Res() res: Response, @Body() body: CreateUserDto) {
         const response = await this.authService.createUser(body);
         const { status: resStatus, message, user, access_token, refresh_token } = response;
-        if (resStatus === status.conflict) return res.status(status.conflict).send({ message });
+        if (resStatus === status.conflict) return res.status(status.conflict).send(message);
         else return res.status(status.success).send({ ...user, access_token, refresh_token });
     }
 
@@ -23,7 +23,7 @@ export class AuthController {
     async loginUser(@Req() req: Request, @Res() res: Response, @Body() body: LoginUserDto) {
         const serviceResponse = await this.authService.loginUser(body);
         const { status: resStatus, message, user, access_token, refresh_token } = serviceResponse;
-        if (resStatus === status.unauthorized) return res.status(status.unauthorized).send({ message });
+        if (resStatus === status.unauthorized) return res.status(status.unauthorized).send(message);
         else return res.status(status.success).send({ ...user, access_token, refresh_token });
     }
 

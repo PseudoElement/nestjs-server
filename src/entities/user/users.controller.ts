@@ -23,7 +23,7 @@ export class UsersController {
         const access_token = req.headers['access-token'] as string;
         const response = await this.userService.getUserData(id, access_token);
         if (response.status === status.unauthorized || response.status === status.conflict) {
-            return res.status(response.status).send({ message: response.message });
+            return res.status(response.status).send(response.message);
         } else {
             return res.status(status.success).send({ user: response.user });
         }
@@ -32,7 +32,7 @@ export class UsersController {
     @Put('/:id')
     async updateUser(@Res() res: Response, @Param('id', ParseIntPipe) id: number, @Body() body: UpdateUserDto) {
         const response = await this.userService.updateUserData(id, body);
-        return res.status(response.status).send({ message: response.message });
+        return res.status(response.status).send(response.message);
     }
 
     @Delete('/:id')

@@ -30,7 +30,7 @@ export class TokenService {
 
     public async createAccessToken(id: number | string): Promise<string> {
         const tokenPayload = { id };
-        const token = await this.jwtService.signAsync(tokenPayload, { secret: this.ACCESS_TOKEN_SECRET, expiresIn: '15s' });
+        const token = await this.jwtService.signAsync(tokenPayload, { secret: this.ACCESS_TOKEN_SECRET, expiresIn: '1h' });
         return token;
     }
 

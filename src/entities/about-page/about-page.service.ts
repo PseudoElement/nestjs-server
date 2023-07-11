@@ -1,16 +1,25 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import * as fs from 'fs';
 import { DeveloperCards } from './about-page.model';
-import { DEVELOPER_CARDS_REPOSITORY } from 'src/constants';
+import { DEVELOPER_CARDS_REPOSITORY, developerCards } from 'src/constants';
 import { IDeveloperCardFromDB, IDeveloperCardToDB } from 'src/model';
 import { convertBufferToImg } from 'src/helpers';
 
 @Injectable()
-export class AboutPageService {
+export class AboutPageService implements OnModuleInit {
     private readonly attributes = { exclude: ['updatedAt', 'createdAt', 'id'] };
 
     constructor(@Inject(DEVELOPER_CARDS_REPOSITORY) private readonly developerCardsRepo: typeof DeveloperCards) {}
-    private async _insertPhoto(data: IDeveloperCardToDB): Promise<void> {
+
+    async onModuleInit() {}
+
+    private async _insertAllData() {
+        for (const card of developerCards) {
+            await this._insertDeveloperCard(card);
+        }
+    }
+
+    private async _insertDeveloperCard(data: IDeveloperCardToDB): Promise<void> {
         const imageBuffer = fs.readFileSync(data.photoPath);
         await this.developerCardsRepo.create({
             name: data.name,

@@ -1,5 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { GAMES_REPOSITORY, WEB_APPS_REPOSITORY } from 'src/constants';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { GAMES_REPOSITORY, WEB_APPS_REPOSITORY, productsApplications, productsGames } from 'src/constants';
 import { Applications } from './apps.model';
 import { IApplicationFromDB, IApplicationToDB, IGetWebApplicationsQueryParams } from 'src/model';
 import * as fs from 'fs';
@@ -7,17 +7,19 @@ import { convertBufferToImg } from 'src/helpers';
 import { Games } from './games.model';
 
 @Injectable()
-export class ProductsPageService {
+export class ProductsPageService implements OnModuleInit {
     private readonly attributes = { exclude: ['updatedAt', 'createdAt', 'id'] };
     private readonly routeToImagesInDocker = '/app/dist/assets/png/JokerCoinStartPage.png';
 
     constructor(
-        @Inject(WEB_APPS_REPOSITORY) private appsRepository: typeof Applications,
+        @Inject(WEB_APPS_REPOSITORY) private readonly appsRepository: typeof Applications,
         @Inject(GAMES_REPOSITORY) private readonly gamesRepository: typeof Games,
     ) {}
 
+    async onModuleInit() {}
+
     public async getAllWebApplications(): Promise<IApplicationFromDB[]> {
-        const res = await this.appsRepository.findAll({ attributes: this.attributes });
+        const res = await this.appsRepository.findAll({ attributes: this.attributes, order: ['createdAt'] });
         const apps = res.map((val) => {
             const data = val.dataValues;
             const photo = convertBufferToImg(data.appPhoto);
@@ -57,14 +59,34 @@ export class ProductsPageService {
         return games;
     }
 
-    private async _addApp(data: IApplicationToDB): Promise<void> {
+    private async _insertAllApps() {
+        for (const app of productsApplications) {
+            await this._addApp(app, 'apps');
+        }
+    }
+
+    private async _insertAllGames() {
+        for (const game of productsGames) {
+            await this._addApp(game, 'games');
+        }
+    }
+
+    private async _addApp(data: IApplicationToDB, type: 'games' | 'apps'): Promise<void> {
         const imageBuffer = fs.readFileSync(data.pathToAppPhoto);
-        const res = await this.gamesRepository.create({
+        const dataObject = {
             authorLink: data.authorLink,
             description: data.description,
             title: data.title,
             url: data.url,
             appPhoto: imageBuffer,
-        });
+        };
+        switch (type) {
+            case 'apps':
+                await this.appsRepository.create(dataObject);
+                break;
+            case 'games':
+                await this.gamesRepository.create(dataObject);
+                break;
+        }
     }
 }

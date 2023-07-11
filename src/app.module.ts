@@ -12,6 +12,8 @@ import { ProductsPageModule } from './entities/products-page/products-page.modul
 import { Applications } from '@entities/products-page/apps.model';
 import { Games } from '@entities/products-page/games.model';
 import { TokenService } from './services/token.service';
+import { DeveloperPageModule } from './entities/developer-page/developer-page.module';
+import { Developers } from '@entities/developer-page/developer-page.model';
 
 @Module({
     imports: [
@@ -22,7 +24,7 @@ import { TokenService } from './services/token.service';
             username: 'postgres',
             password: 'root',
             database: 'nestjs-db',
-            models: [Users, Messages, DeveloperCards, Applications, Games],
+            models: [Users, Messages, DeveloperCards, Applications, Games, Developers],
             autoLoadModels: true,
             synchronize: true,
         }),
@@ -32,6 +34,7 @@ import { TokenService } from './services/token.service';
         ChatModule,
         AboutPageModule,
         ProductsPageModule,
+        DeveloperPageModule,
     ],
     providers: [TokenService],
 })
