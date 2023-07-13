@@ -5,3 +5,4 @@ export * from './about-page';
 export * from './chat';
 export * from './token';
 export * from './developer-page';
+export * from './other-page';

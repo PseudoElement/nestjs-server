@@ -4,6 +4,7 @@ import { Socket } from 'dgram';
 import { Server } from 'socket.io';
 import { MessagesDto } from './dto/MessageDto';
 import { ChatService } from './chat.service';
+import { omitProp } from 'src/helpers';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateway implements OnModuleInit {
@@ -14,7 +15,6 @@ export class ChatGateway implements OnModuleInit {
 
     @SubscribeMessage('messageFromClient')
     async handleMessage(@MessageBody() body: MessagesDto, @ConnectedSocket() client: Socket): Promise<void> {
-        console.log(body);
         const message = await this.chatService.saveMessage(body);
         const messagesNumber = await this.chatService.checkMessagesNumberInDB();
         if (messagesNumber > 100) {

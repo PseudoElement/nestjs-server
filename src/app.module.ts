@@ -14,6 +14,8 @@ import { Games } from '@entities/products-page/games.model';
 import { TokenService } from './services/token.service';
 import { DeveloperPageModule } from './entities/developer-page/developer-page.module';
 import { Developers } from '@entities/developer-page/developer-page.model';
+import { OtherPageModule } from './entities/other-page/other-page.module';
+import { RandomWheelResults } from '@entities/other-page/results.model';
 
 @Module({
     imports: [
@@ -24,7 +26,7 @@ import { Developers } from '@entities/developer-page/developer-page.model';
             username: 'postgres',
             password: 'root',
             database: 'nestjs-db',
-            models: [Users, Messages, DeveloperCards, Applications, Games, Developers],
+            models: [Users, Messages, DeveloperCards, Applications, Games, Developers, RandomWheelResults],
             autoLoadModels: true,
             synchronize: true,
         }),
@@ -35,6 +37,7 @@ import { Developers } from '@entities/developer-page/developer-page.model';
         AboutPageModule,
         ProductsPageModule,
         DeveloperPageModule,
+        OtherPageModule,
     ],
     providers: [TokenService],
 })
