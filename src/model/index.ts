@@ -6,3 +6,4 @@ export * from './chat';
 export * from './token';
 export * from './developer-page';
 export * from './other-page';
+export * from './my-account';

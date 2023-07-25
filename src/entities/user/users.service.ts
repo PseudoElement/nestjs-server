@@ -2,8 +2,9 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Users } from './users.model';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { USERS_REPOSITORY, messages, status } from 'src/constants';
-import { IDeleteUserResponse, IGetUserResponse, IUpdateUserResponse, IUserWithoutPass } from 'src/model';
+import { IDeleteUserResponse, IGetUserResponse, IUserWithoutPass } from 'src/model';
 import { TokenService } from 'src/services/token.service';
+import { convertBufferToImg, omitProp } from 'src/helpers';
 
 @Injectable()
 export class UsersService {
@@ -11,15 +12,10 @@ export class UsersService {
 
     constructor(@Inject(USERS_REPOSITORY) private readonly usersRepository: typeof Users, private tokenService: TokenService) {}
 
-    public async updateUserData(id: number, body: UpdateUserDto): Promise<IUpdateUserResponse> {
-        const res = await this.usersRepository.update(body, { where: { id } });
-        if (res[0] === 0) return { status: status.conflict, message: messages.userDoesntExist };
-        return { status: status.success, message: messages.userDataUpdated };
-    }
-
     public async getAllUsers(): Promise<IUserWithoutPass[]> {
         const users = await this.usersRepository.findAll({ attributes: this.attributes });
-        return users;
+        const transformedUsers = users.map((user) => ({ ...user, photoSrc: convertBufferToImg(user.photo) }));
+        return transformedUsers;
     }
 
     public async getUserData(id: number, access_token: string): Promise<IGetUserResponse> {
@@ -27,7 +23,10 @@ export class UsersService {
             await this.tokenService.verifyAccessToken(access_token);
             const user = await this.usersRepository.findOne({ where: { id }, attributes: this.attributes });
             if (!user) return { status: status.conflict, message: messages.userDoesntExist };
-            else return { status: status.success, user: user.dataValues };
+            else {
+                const transformedUser = omitProp('photo', { ...user.dataValues, photoSrc: convertBufferToImg(user.dataValues.photo) });
+                return { status: status.success, user: transformedUser };
+            }
         } catch (err) {
             return { status: status.unauthorized, message: messages.accessTokenExpired };
         }

@@ -16,6 +16,7 @@ import { DeveloperPageModule } from './entities/developer-page/developer-page.mo
 import { Developers } from '@entities/developer-page/developer-page.model';
 import { OtherPageModule } from './entities/other-page/other-page.module';
 import { RandomWheelResults } from '@entities/other-page/results.model';
+import { MyAccountModule } from './entities/my-account/my-account.module';
 
 @Module({
     imports: [
@@ -38,6 +39,7 @@ import { RandomWheelResults } from '@entities/other-page/results.model';
         ProductsPageModule,
         DeveloperPageModule,
         OtherPageModule,
+        MyAccountModule,
     ],
     providers: [TokenService],
 })

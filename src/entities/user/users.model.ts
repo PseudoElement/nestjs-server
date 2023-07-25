@@ -15,4 +15,7 @@ export class Users extends Model<Users> {
 
     @Column({ type: DataType.STRING })
     password: string;
+
+    @Column({ type: DataType.BLOB, allowNull: true })
+    photo: ArrayBuffer | ArrayBufferLike | Buffer;
 }

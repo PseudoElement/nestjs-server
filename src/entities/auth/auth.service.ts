@@ -4,8 +4,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare, genSalt, hash } from 'bcrypt';
 import { USERS_REPOSITORY, messages, status } from 'src/constants';
-import { omitProp } from 'src/helpers';
-import { ICreateUserResponse, ILoginUserResponse, IUser } from 'src/model';
+import { convertBufferToImg, omitProp } from 'src/helpers';
+import { ICreateUserResponse, IGetUserResponse, ILoginUserResponse, IUser } from 'src/model';
 import { TokenService } from 'src/services/token.service';
 
 @Injectable()
@@ -18,7 +18,8 @@ export class AuthService {
         const salt = await genSalt(10);
         const hashedPassword = await hash(userData.password, salt);
         const response = await this.usersRepository.create({ ...userData, password: hashedPassword }, { isNewRecord: true });
-        const user = response.dataValues;
+        const photo = response.dataValues.photo ? convertBufferToImg(response.dataValues.photo) : null;
+        const user = omitProp('photo', { ...response.dataValues, photoSrc: photo });
         const access_token = await this.tokenService.createAccessToken(user.id);
         const refresh_token = await this.tokenService.createRefreshToken(user.id);
         return { user: omitProp('password', user), status: status.success, access_token, refresh_token };
@@ -29,7 +30,8 @@ export class AuthService {
         if (!response) {
             return { message: messages.userDoesntExist, status: status.unauthorized };
         }
-        const user = response.dataValues;
+        const photo = response.dataValues.photo ? convertBufferToImg(response.dataValues.photo) : null;
+        const user = omitProp('photo', { ...response.dataValues, photoSrc: photo });
         const match = await compare(loginData.password, user.password);
         if (!match) {
             return { message: messages.incorrectPassword, status: status.unauthorized };

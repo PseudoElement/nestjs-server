@@ -9,6 +9,10 @@ export interface IUser {
     id: number;
 }
 
+export interface IUserWithoutPass extends Omit<IUser, 'password'> {
+    photoSrc: string | null;
+}
+
 export interface ICreateUserResponse {
     status: number;
     access_token?: string;
@@ -21,8 +25,4 @@ export type ILoginUserResponse = ICreateUserResponse;
 
 export type IGetUserResponse = Omit<ILoginUserResponse, 'access_token' | 'refresh_token'>;
 
-export type IUserWithoutPass = Omit<IUser, 'password'>;
-
 export type IDeleteUserResponse = Required<Pick<ILoginUserResponse, 'message' | 'status'>>;
-
-export type IUpdateUserResponse = IDeleteUserResponse;

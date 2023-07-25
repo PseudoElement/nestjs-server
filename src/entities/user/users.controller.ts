@@ -1,7 +1,6 @@
 import { UsersService } from './users.service';
-import { Controller, Get, Put, Delete, Req, Res, Param, ParseIntPipe, Body } from '@nestjs/common';
+import { Controller, Get, Delete, Req, Res, Param, ParseIntPipe } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { UpdateUserDto } from './dto/updateUser.dto';
 import { status } from 'src/constants';
 
 @Controller('users')
@@ -27,12 +26,6 @@ export class UsersController {
         } else {
             return res.status(status.success).send({ user: response.user });
         }
-    }
-
-    @Put('/:id')
-    async updateUser(@Res() res: Response, @Param('id', ParseIntPipe) id: number, @Body() body: UpdateUserDto) {
-        const response = await this.userService.updateUserData(id, body);
-        return res.status(response.status).send(response.message);
     }
 
     @Delete('/:id')
