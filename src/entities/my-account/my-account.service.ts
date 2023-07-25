@@ -19,8 +19,10 @@ export class MyAccountService {
     }
 
     public async changeUserEmail(id: number, newEmail: string): Promise<IChangeUserEmailRes> {
+        console.log('__________________________________________', id, newEmail);
         try {
             const res = await this.usersRepository.update({ email: newEmail }, { where: { id } });
+            console.log('RES WAS THE NEXT__________', res);
             const user = await this.usersRepository.findOne({ where: { id }, attributes: { exclude: ['password', 'updatedAt'] } });
             const transformedUser = omitProp('photo', { ...user.dataValues, photoSrc: convertBufferToImg(user.dataValues.photo) });
             return { status: status.success, user: transformedUser };

@@ -19,7 +19,7 @@ export class MyAccountController {
 
     @Patch('email')
     public async changeUserEmail(@Body() body: IChangeUserEmailRequestBody, @Res() res: Response) {
-        const serviceRes = await this.myAccountService.changeUserEmail(+body.id, body.newEmail);
+        const serviceRes = await this.myAccountService.changeUserEmail(+body.id, body.email);
         if (serviceRes.status === status.success) return res.status(200).send({ ...serviceRes.user });
         else return res.status(serviceRes.status).send(serviceRes.message);
     }

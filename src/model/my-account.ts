@@ -11,7 +11,7 @@ export interface IChangeUserPhotoRequestBody {
 }
 export interface IChangeUserEmailRequestBody {
     id: number;
-    newEmail: string;
+    email: string;
 }
 
 export interface IChangeUserEmailRes {
