@@ -41,7 +41,6 @@ export class DeveloperPageService implements OnModuleInit {
             socials: data.socials,
             photoSrcData: convertBufferToImg(res.dataValues.photo),
         };
-        console.log('DEVELOPER', developer);
         return developer;
     }
 }

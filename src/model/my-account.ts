@@ -19,3 +19,13 @@ export interface IChangeUserEmailRes {
     status: number;
     message?: string;
 }
+
+export interface IChangeUserPasswordRes {
+    status: number;
+    message: string;
+}
+
+export interface IChangeUserPasswordRequestBody {
+    newPassword: string;
+    oldPassword: string;
+}

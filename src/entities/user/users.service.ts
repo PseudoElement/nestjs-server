@@ -24,7 +24,8 @@ export class UsersService {
             const user = await this.usersRepository.findOne({ where: { id }, attributes: this.attributes });
             if (!user) return { status: status.conflict, message: messages.userDoesntExist };
             else {
-                const transformedUser = omitProp('photo', { ...user.dataValues, photoSrc: convertBufferToImg(user.dataValues.photo) });
+                const photoSrc = user.dataValues.photo ? convertBufferToImg(user.dataValues.photo) : null;
+                const transformedUser = omitProp('photo', { ...user.dataValues, photoSrc: photoSrc });
                 return { status: status.success, user: transformedUser };
             }
         } catch (err) {

@@ -10,9 +10,11 @@ export const messages = {
     refreshTokenExpired: 'Refresh token expired',
     userDoesntExist: "User doesn't exist",
     incorrectPassword: 'Incorrect password',
+    incorrectOldPassword: 'Incorrect old password',
     needAuth: 'Login is necessary to visit this route',
     serverError: 'Server error!',
     userDataUpdated: "User's data updated",
     deleted: "User's successfully deleted",
     tokenRefreshed: 'Token refreshed',
+    passwordUpdated: 'Password successfully updated!',
 } as const;
